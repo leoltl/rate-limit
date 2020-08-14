@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rate Limiter</title>
+</head>
+<body>
+  Rate Limiter
+
+  <h1>User</h1>
+  <a href="/set-user?user=first"><button>First</button></a>
+  <a href="/set-user?user=second"><button>Second</button></a>
+  <a href="/set-user"><button>None</button></a>
+
+  <h1>Limiter</h1>
+  <a href="/set-limit-strategy?limiter=tokenBucketLimiter"><button>tokenBucketLimiter</button></a>
+  <a href="/set-limit-strategy?limiter=leakyBucketLimiter"><button>leakyBucketLimiter</button></a>
+</body>
+</html>
