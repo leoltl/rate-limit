@@ -1,5 +1,5 @@
 const { TOO_MANY_REQUESTS } = require("http-status-codes");
-const DEFAULT_RATE = 5;
+const DEFAULT_RATE = 2;
 
 class Bucket {
   constructor(options={}) {
@@ -7,7 +7,7 @@ class Bucket {
   }
 
   accessAllowed() {
-    if ( this.rate > 0) {
+    if (this.rate > 0) {
       this.enqueue();
       return true;
     }
@@ -33,7 +33,7 @@ module.exports = function makeLimiterMiddleware(limiterOptions) {
       })
       next();
     } else {
-      res.status(TOO_MANY_REQUESTS).send(`Rate limit reached. Please try again shortly.`)
+      res.status(TOO_MANY_REQUESTS).send(`Concurrent request limit reached. Please try again shortly.`)
     }
   }
 }

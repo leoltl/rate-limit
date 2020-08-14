@@ -15,11 +15,11 @@ function setUser(req, res, next) {
 }
 app.use(setUser);
 
-const { makeDynamicMiddlewares } = require("./rate-limiter");
-const [dynamicLimiter, changeMiddleware] =  makeDynamicMiddlewares()
+const { makeDynamicLimiter } = require("./rate-limiter");
+const [dynamicLimiter, changeLimiter] =  makeDynamicLimiter()
 
 app.get("/set-limit-strategy", (req, res) => {
-  changeMiddleware(req.query.limiter);
+  changeLimiter(req.query.limiter);
   res.redirect("/");
 });
 

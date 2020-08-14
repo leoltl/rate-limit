@@ -1,7 +1,7 @@
 const makeTokenBucket = require("./user/token-bucket");
 const makeLeakyBucket = require("./application/leaky-bucket");
 
-function makeDynamicMiddlewares() {
+function makeDynamicLimiter() {
   const limiters = {
     tokenBucketLimiter: makeTokenBucket(),
     leakyBucketLimiter: makeLeakyBucket()
@@ -22,5 +22,5 @@ function makeDynamicMiddlewares() {
 module.exports = {
   makeTokenBucket,
   makeLeakyBucket,
-  makeDynamicMiddlewares
+  makeDynamicLimiter
 };
