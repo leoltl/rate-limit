@@ -4,22 +4,24 @@ const DEFAULT_RATE = 2;
 class Bucket {
   constructor(options={}) {
     this.rate = options.rate || DEFAULT_RATE;
+    this.queue = []
   }
 
-  accessAllowed() {
-    if (this.rate > 0) {
-      this.enqueue();
+  accessAllowed(req) {
+    if (this.queue.length < this.rate) {
+      this.enqueue(req);
       return true;
     }
     return false;
   }
 
-  enqueue() {
-    this.rate--;
+  enqueue(req) {
+    this.queue.push(req)
   }
 
-  dequeue() {
-    this.rate++;
+  dequeue(req) {
+    const idx = this.queue.indexOf(req);
+    this.queue.splice(idx, 1);
   }
 }
 
@@ -27,7 +29,7 @@ module.exports = function makeLimiterMiddleware(limiterOptions) {
   const bucketSingleton = new Bucket(limiterOptions)
   return function leakylimiter(req, res, next) {
     console.log("Using leaky bucket strategy");
-    if (bucketSingleton.accessAllowed()) {
+    if (bucketSingleton.accessAllowed(req)) {
       req.on('close', () => { 
         bucketSingleton.dequeue()
       })
