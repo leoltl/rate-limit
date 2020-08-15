@@ -1,14 +1,18 @@
 const { TOO_MANY_REQUESTS } = require("http-status-codes");
-const DEFAULT_RATE = 2;
+const Limiter = require("../Limiter");
 
-class Bucket {
+class Bucket extends Limiter {
   constructor(options={}) {
-    this.rate = options.rate || DEFAULT_RATE;
+    super(options)
     this.queue = []
   }
 
+  nextAvailableTime() {
+    return new Date();
+  }
+
   accessAllowed(req) {
-    if (this.queue.length < this.rate) {
+    if (this.queue.length < this.initialRate) {
       this.enqueue(req);
       return true;
     }
@@ -21,6 +25,9 @@ class Bucket {
 
   dequeue(req) {
     const idx = this.queue.indexOf(req);
+    if (idx == -1) {
+      console.error("Request not found")
+    }
     this.queue.splice(idx, 1);
   }
 }
@@ -31,11 +38,11 @@ module.exports = function makeLimiterMiddleware(limiterOptions) {
     console.log("Using leaky bucket strategy");
     if (bucketSingleton.accessAllowed(req)) {
       req.on('close', () => { 
-        bucketSingleton.dequeue()
+        bucketSingleton.dequeue(req)
       })
       next();
     } else {
-      res.status(TOO_MANY_REQUESTS).send(`Concurrent request limit reached. Please try again shortly.`)
+      res.status(TOO_MANY_REQUESTS).send(`Concurrent requests limit reached. Service will resume at ${bucketSingleton.nextAvailableTime()}.`)
     }
   }
 }

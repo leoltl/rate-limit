@@ -1,12 +1,12 @@
 const { TOO_MANY_REQUESTS } = require("http-status-codes");
-const DEFAULT_RATE = 5;
-const DEFAULT_INTERVAL = 5000;
+const Limiter = require("../Limiter")
+const DEFAULT_INTERVAL = 5;
 
-class Bucket {
+class Bucket extends Limiter {
   
   constructor(options={}) {
-    this.initialRate = options.rate || DEFAULT_RATE;
-    this.interval = options.intervalInMS || DEFAULT_INTERVAL;
+    super(options)
+    this.interval = options.intervalInMS || DEFAULT_INTERVAL * 1000;
     this.userLimit = options.userLimitStorage || new Map();
   }
 
@@ -44,7 +44,6 @@ class Bucket {
   }
 
 }
-
 
 module.exports = function makeLimiterMiddleware(limiterOptions) {
   const bucketSingleton = new Bucket(limiterOptions)
