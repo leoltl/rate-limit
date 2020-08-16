@@ -39,12 +39,12 @@ class FixWindow extends Limiter {
   }
 
   recordUsage(userKey, currentInterval) {
-    const userUsage = this._getUserUsage(userKey, currentInterval)
-    userUsage.push(new Date())
+    this._getUserUsage(userKey, currentInterval).push(new Date())
   }
 
   hasQuotaRemains(userKey, currentInterval) {
-    if ((this._getUserUsage(userKey, currentInterval).length) > this.initialRate - 1) {
+    const usageCount = this._getUserUsage(userKey, currentInterval).length
+    if (usageCount > this.initialRate - 1) {
       this.recordUsage(userKey, currentInterval)
       return false
     }
