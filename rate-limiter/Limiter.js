@@ -6,12 +6,12 @@ class Limiter {
   }
 
   accessAllowed() {
-    // TODO implement accessAllowed
+    // TODO implement accessAllowed in sub classes
     return 
   }
 
   nextAvailableTime() {
-    // TODO implement nextAvailableTime
+    // TODO implement nextAvailableTime in sub classes
     return
   }
 }

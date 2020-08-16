@@ -5,7 +5,6 @@ const DEFAULT_INTERVAL = 5;
 class FixWindow extends Limiter {
 
   constructor(options={}) {
-    console.log(options)
     super(options);
     this.interval = options.intervalInMS || DEFAULT_INTERVAL * 1000;
     this.userLimit = options.userLimitStorage || new Map();
